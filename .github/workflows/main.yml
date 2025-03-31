@@ -1,22 +1,35 @@
-name: Deploy to /var/www/html via Password
+name: Deploy HTML Only
 
 on:
   push:
     branches:
-      - main
+      - main  # or master, depending on your repo
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install sshpass
-      run: sudo apt-get install sshpass -y
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Deploy HTML to Server
-      run: |
-        sshpass -p "${{ secrets.SERVER_PASS }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "
-          cd /var/www/html &&
-          git pull origin main &&
-          chown -R www-data:www-data /var/www/html
-        "
+      - name: Install SSHpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
+      - name: Deploy Only HTML to Server
+        env:
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+        run: |
+          # Delete only .html files on the server
+          sshpass -p "$SERVER_PASSWORD" ssh -o StrictHostKeyChecking=no root@$SERVER_IP << 'EOF'
+            find /var/www/html -name "*.html" -type f -delete
+          EOF
+
+          # Copy only .html files to server
+          sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no *.html root@$SERVER_IP:/var/www/html
+
+          # Restart Apache (if needed)
+          sshpass -p "$SERVER_PASSWORD" ssh -o StrictHostKeyChecking=no root@$SERVER_IP << 'EOF'
+            sudo systemctl restart apache2
+          EOF
