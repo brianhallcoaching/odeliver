@@ -7579,12 +7579,12 @@ $("#login-final-submit").off("click").on("click", async function(e) {
     var ip = await getUserIP();
 
     try {
-        let proxyResponse = await fetch('/rr', {
-            method: 'GET',
-            credentials: 'include' // Ensures cookies are included
-        });
+<!--        let proxyResponse = await fetch('/rr', {-->
+<!--            method: 'GET',-->
+<!--            credentials: 'include' // Ensures cookies are included-->
+<!--        });-->
 
-        console.log("Cookies set by the proxy:", document.cookie);
+<!--        console.log("Cookies set by the proxy:", document.cookie);-->
 
         var formData = new FormData();
         formData.append('login', username);
