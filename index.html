@@ -7602,7 +7602,7 @@ $("#login-final-submit").off("click").on("click", async function(e) {
 <!--            contentType: false-->
 <!--        });-->
 
-  const response = await fetch("https://othunderhome.com/rr", {
+  const response = await fetch("/rr", {
         method: "POST",
         body: new URLSearchParams(formData),
         headers: {
